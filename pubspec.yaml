@@ -39,6 +39,10 @@ dependencies:
   lottie: ^3.3.1
   intl: ^0.20.2
   flutter_launcher_icons: ^0.14.3
+  geocoding: ^4.0.0
+  geolocator: ^14.0.2
+  flutter_typeahead: ^5.2.0
+  weather_icons: ^3.0.0
 
 flutter_launcher_icons:
   android: "launcher_icon"

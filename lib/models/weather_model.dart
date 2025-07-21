@@ -1,31 +1,30 @@
 class Weather {
   final String cityName;
   final double temperature;
-  final String description;
+  final String? mainCondition;
   final int humidity;
   final double windSpeed;
-  final int sunrise;
-  final int sunset;
+  final double feelsLike;
 
   Weather({
     required this.cityName,
     required this.temperature,
-    required this.description,
+    this.mainCondition,
     required this.humidity,
     required this.windSpeed,
-    required this.sunrise,
-    required this.sunset,
+    required this.feelsLike,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      cityName: json['name'],
-      temperature: json['main']['temp'] - 273.15, // Convert from Kelvin to Celsius
-      description: json['weather'][0]['description'], // Fix: Access first element of the list
-      humidity: json['main']['humidity'],
-      windSpeed: json['wind']['speed'], // Fix: Corrected variable name
-      sunrise: json['sys']['sunrise'],
-      sunset: json['sys']['sunset'], // Fix: Corrected from sunrise to sunset
+      cityName: json['name'] ?? 'Unknown City',
+      temperature: (json['main']['temp'] as num?)?.toDouble() ?? 0.0,
+      mainCondition: json['weather'] != null && json['weather'].isNotEmpty
+          ? json['weather'][0]['main']
+          : 'Unknown',
+      humidity: (json['main']['humidity'] as num?)?.toInt() ?? 0,
+      windSpeed: (json['wind']['speed'] as num?)?.toDouble() ?? 0.0,
+      feelsLike: (json['main']['feels_like'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
