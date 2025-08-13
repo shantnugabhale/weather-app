@@ -43,25 +43,61 @@ class WeatherCard extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            // Weather Animation
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
+            // Weather Animation and Temperature in one line
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Weather Animation
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Lottie.asset(
+                    (weather.description?.toLowerCase().contains('rain') ?? false)
+                        ? 'assets/rain.json'
+                        : (weather.description?.toLowerCase().contains('clear') ?? false)
+                        ? 'assets/sunny.json'
+                        : 'assets/cloudy.json',
+                    height: 80,
+                    width: 80,
+                  ),
                 ),
-              ),
-              child: Lottie.asset(
-                (weather.description?.toLowerCase().contains('rain') ?? false)
-                    ? 'assets/rain.json'
-                    : (weather.description?.toLowerCase().contains('clear') ?? false)
-                    ? 'assets/sunny.json'
-                    : 'assets/cloudy.json',
-                height: 120,
-                width: 120,
-              ),
+                
+                // Temperature and Description
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${weather.temperature.toStringAsFixed(1)}°C',
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                        letterSpacing: -1,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        weather.description ?? 'Unknown',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             
             const SizedBox(height: 24),
@@ -73,36 +109,6 @@ class WeatherCard extends StatelessWidget {
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.5,
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Temperature
-            Text(
-              '${weather.temperature.toStringAsFixed(1)}°C',
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontWeight: FontWeight.w300,
-                color: Colors.white,
-                letterSpacing: -1,
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Weather Description
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                weather.description ?? 'Unknown',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
               ),
             ),
             

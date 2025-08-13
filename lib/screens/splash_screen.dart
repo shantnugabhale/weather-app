@@ -110,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             colors: [
               Colors.lightBlue.shade400,
               Colors.lightBlue.shade600,
-              Colors.blue.shade700,
+              const Color(0xFF1976D2),
             ],
           ),
         ),
