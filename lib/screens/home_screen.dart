@@ -510,24 +510,31 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // FIX: Wraps each weather info chip in an Expanded widget to prevent horizontal overflow.
             children: [
-              _buildWeatherInfoChip(
-                Icons.thermostat,
-                'Feels Like',
-                '${_weather?.feelsLike.round() ?? 0}°',
-                Colors.orange,
+              Expanded(
+                child: _buildWeatherInfoChip(
+                  Icons.thermostat,
+                  'Feels Like',
+                  '${_weather?.feelsLike.round() ?? 0}°',
+                  Colors.orange,
+                ),
               ),
-              _buildWeatherInfoChip(
-                Icons.water_drop,
-                'Humidity',
-                '${_weather?.humidity ?? 0}%',
-                Colors.blue,
+              Expanded(
+                child: _buildWeatherInfoChip(
+                  Icons.water_drop,
+                  'Humidity',
+                  '${_weather?.humidity ?? 0}%',
+                  Colors.blue,
+                ),
               ),
-              _buildWeatherInfoChip(
-                Icons.air,
-                'Wind',
-                '${_weather?.windSpeed ?? 0} km/h',
-                Colors.green,
+              Expanded(
+                child: _buildWeatherInfoChip(
+                  Icons.air,
+                  'Wind',
+                  '${_weather?.windSpeed.toStringAsFixed(1) ?? 0} km/h',
+                  Colors.green,
+                ),
               ),
             ],
           ),
@@ -538,6 +545,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Widget _buildWeatherInfoChip(IconData icon, String label, String value, Color color) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4), // Added a small margin for spacing
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.2),
@@ -1606,21 +1614,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 'Detailed Information',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
+                  letterSpacing: 0.2,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 20),
+          // FIX: Changed childAspectRatio to a smaller value to prevent vertical overflow on smaller screens.
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            childAspectRatio: 1.3,
+            childAspectRatio: 0.9,
             children: [
               _buildDetailItem(Icons.thermostat, "Feels Like", '${_weather?.feelsLike.round() ?? 0}°', Colors.orange),
               _buildDetailItem(Icons.water_drop_outlined, "Humidity", '${_weather?.humidity ?? 0}%', Colors.blue),
