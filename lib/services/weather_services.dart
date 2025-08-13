@@ -80,7 +80,9 @@ class WeatherService {
       }
 
       Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+          ));
 
       List<Placemark> placemarks =
       await placemarkFromCoordinates(position.latitude, position.longitude);
