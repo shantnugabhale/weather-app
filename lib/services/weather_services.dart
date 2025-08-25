@@ -3,6 +3,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/services/location_service.dart';
 
 class WeatherService {
   static const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
@@ -20,7 +21,8 @@ class WeatherService {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        return Weather.fromJson(jsonDecode(response.body));
+        final data = jsonDecode(response.body);
+        return Weather.fromJson(data);
       } else {
         print("Error fetching weather data. Status code: ${response.statusCode}");
         print("Response body: ${response.body}");
@@ -67,29 +69,13 @@ class WeatherService {
   /// Determines the current city of the device using geolocation.
   Future<String> getCurrentCity() async {
     try {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          throw Exception('Location permissions are denied.');
-        }
+      // Check if live location is available
+      if (!LocationService.isLiveLocationAvailable) {
+        throw Exception('Live location is not available yet. Coming soon!');
       }
-
-      if (permission == LocationPermission.deniedForever) {
-        throw Exception('Location permissions are permanently denied. Please enable them in your device settings.');
-      }
-
-      Position position = await Geolocator.getCurrentPosition(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-          ));
-
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
-
-      String? city = placemarks.isNotEmpty ? placemarks[0].locality : null;
-
-      return city ?? "";
+      
+      final cityName = await LocationService.getCurrentCity();
+      return cityName ?? "";
     } catch (e) {
       print("An error occurred in getCurrentCity: $e");
       rethrow;
